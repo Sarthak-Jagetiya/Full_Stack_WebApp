@@ -12,7 +12,8 @@ import {
   mailOutline,
   leafOutline,
   logoInstagram,
-  logoTwitter,
+  // logoTwitter,
+  logoGithub,
   logoWhatsapp,
   flameOutline,
   logoLinkedin,
@@ -27,6 +28,7 @@ function Home() {
   const [artForms, setArtForms] = useState([]);
   const [foods, setFoods] = useState([]);
   const [danceForm, setDanceForm] = useState([]);
+  const [language, setLanguage] = useState([]);
 
   const renderIcons = (iconsCount) => {
     const iconsArray = Array.from(Array(iconsCount).keys());
@@ -166,10 +168,24 @@ function Home() {
         console.error(error);
       }
     };
+    const fetchAllData3 = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/languages",
+          {
+            headers: { "Cache-Control": "public, max-age=86400" }, // Set cache headers for API request
+          }
+        );
+        setLanguage(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
     fetchAllData();
     fetchAllData1();
     fetchAllData2();
+    fetchAllData3();
   }, []);
   // const [list, setList] = useState([]);
 
@@ -191,19 +207,25 @@ function Home() {
               <div className="main-attributes">
                 <div className="attribute">
                   <p className="attribute-text">Food</p>
-                  <p className="attribute-number">31+ Dishes</p>
+                  <p className="attribute-number">{foods.length}+ Dishes</p>
                 </div>
                 <div className="attribute">
                   <p className="attribute-text">Art</p>
-                  <p className="attribute-number">50+ Art Forms</p>
+                  <p className="attribute-number">
+                    {artForms.length}+ Art Forms
+                  </p>
                 </div>
                 <div className="attribute">
                   <p className="attribute-text">Dance Form</p>
-                  <p className="attribute-number">9+ Dance Forms</p>
+                  <p className="attribute-number">
+                    {danceForm.length}+ Dance Forms
+                  </p>
                 </div>
                 <div className="attribute">
-                  <p className="attribute-text">Dilects</p>
-                  <p className="attribute-number">398+ Dilects</p>
+                  <p className="attribute-text">Languages</p>
+                  <p className="attribute-number">
+                    {language.length}+ Languages
+                  </p>
                 </div>
               </div>
             </div>
@@ -594,13 +616,13 @@ function Home() {
                 <a
                   className="footer-link"
                   aria-label="twitter url of sarthak jagetiya"
-                  href="https://twitter.com/JagetiyaSarthak"
+                  href="https://github.com/Sarthak-Jagetiya"
                   target="_blank"
                   rel="noreferrer"
                 >
                   <IonIcon
                     aria-label="icon for twitter"
-                    icon={logoTwitter}
+                    icon={logoGithub}
                     className="footer_icon"
                   />
                 </a>
