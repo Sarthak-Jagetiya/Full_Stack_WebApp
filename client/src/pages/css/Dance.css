@@ -1,0 +1,120 @@
+.dance_icon {
+  fill: gold;
+  height: 1.5rem;
+  z-index: 9;
+}
+
+.dance_post {
+  height: 38rem;
+}
+
+.dance_body {
+  height: 55%;
+}
+
+.dance_instruments {
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+/********************************/
+/* BELOW 1440 px */
+/********************************/
+
+@media (max-width: 90em) {
+  .dance_post {
+    max-height: 35rem;
+  }
+
+  .dance_body {
+    height: 18rem;
+  }
+
+  .post_content_dance {
+    width: 85%;
+  }
+
+  .post_img_dance {
+    min-height: 17.5rem;
+    width: auto;
+  }
+
+  .content_heading_dance {
+    font-size: 1rem;
+  }
+}
+
+/********************************/
+/* BELOW 912 px */
+/********************************/
+
+@media (max-width: 57em) {
+
+  .state_name_dance,
+  .tags_dance ul li {
+    font-size: 0.6rem;
+  }
+
+  .postedBy_dance span,
+  .container_tags_dance span {
+    font-size: 0.7rem;
+  }
+
+  .tags ul li:before {
+    bottom: auto;
+  }
+
+  .tags ul li:hover:before {
+    height: 5px;
+  }
+}
+
+/********************************/
+/* BELOW 400 px */
+/********************************/
+
+@media (max-width: 25em) {
+  .dance_post {
+    width: 17rem;
+    max-height: 30rem;
+  }
+
+  .dance_body {
+    height: 15rem;
+  }
+
+  .post_content_dance {
+    width: 85%;
+  }
+
+  .post_img_dance {
+    min-height: 17.5rem;
+    width: auto;
+  }
+
+  .content_heading_dance {
+    font-size: 0.8rem;
+  }
+
+  .dance_icon {
+    height: 1rem;
+  }
+
+  .content_desc_dance {
+    font-size: 0.7rem;
+  }
+
+  .state_name_dance,
+  .tags_dance ul li {
+    font-size: 0.5rem;
+  }
+
+  .postedBy_dance span,
+  .container_tags_dance span {
+    font-size: 0.7rem;
+  }
+
+  .container_infos_dance {
+    padding-top: 0.4rem;
+  }
+}
