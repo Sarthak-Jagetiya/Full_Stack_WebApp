@@ -354,6 +354,7 @@
 
 @media (max-width:48em) {
   .food_card {
+    border-radius: 1.5rem;
     grid-template-columns: 1fr;
     width: 25rem;
     height: 35rem;
