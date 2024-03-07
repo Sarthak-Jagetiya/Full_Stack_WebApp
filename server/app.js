@@ -11,6 +11,7 @@ const languageRouter = require("./routes/languageRoute");
 const artFormRouter = require("./routes/artFormRoute");
 const danceFormRouter = require("./routes/danceFormRoute");
 const foodRouter = require("./routes/foodRoute");
+const commentsRouter = require("./routes/commentsRoute");
 
 app.use("/api/users", userRouter);
 app.use("/api/state", stateRouter);
@@ -18,5 +19,6 @@ app.use("/api/languages", languageRouter);
 app.use("/api/art", artFormRouter);
 app.use("/api/dance", danceFormRouter);
 app.use("/api/food", foodRouter);
+app.use("/api/comments", commentsRouter);
 
 module.exports = app;
