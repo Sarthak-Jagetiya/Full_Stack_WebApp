@@ -9,11 +9,11 @@ process.on("uncaughtException", (err) => {
 });
 
 var connection = mysql.createConnection({
-  host: "languagedb-languagedb.c.aivencloud.com",
-  user: "avnadmin",
-  password: "AVNS_B0C1YGD-EqY7fE5CqVl",
-  database: "language",
-  port: "25812",
+  host: "sql6.freesqldatabase.com",
+  user: "sql6689445",
+  password: "BkxjYDFqIv",
+  database: "sql6689445",
+  port: "3306",
 });
 connection.connect((err) => {
   if (err) {
@@ -23,7 +23,7 @@ connection.connect((err) => {
   console.log("DB connected successfull!");
 });
 
-const port = 8080;
+const port = 3000;
 let server;
 db.sequelize.sync().then(() => {
   server = app.listen(port, () => {
