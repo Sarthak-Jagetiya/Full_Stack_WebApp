@@ -9,10 +9,10 @@ process.on("uncaughtException", (err) => {
 });
 
 var connection = mysql.createConnection({
-  host: "sql6.freesqldatabase.com",
-  user: "sql6689445",
-  password: "BkxjYDFqIv",
-  database: "sql6689445",
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "languages",
   port: "3306",
 });
 connection.connect((err) => {
