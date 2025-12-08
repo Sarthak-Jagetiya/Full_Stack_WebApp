@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios"; // import axios from "axios";
 // import { useEffect, useState } from "react";
 import "./css/Home.css";
+import "./css/SkeletonCard.css";
 import { Link } from "react-router-dom";
 import { IonIcon } from "@ionic/react";
 import {
@@ -29,6 +30,10 @@ function Home() {
   const [foods, setFoods] = useState([]);
   const [danceForm, setDanceForm] = useState([]);
   const [language, setLanguage] = useState([]);
+  const [loadingArt, setLoadingArt] = useState(true);
+  const [loadingDance, setLoadingDance] = useState(true);
+  const [loadingFood, setLoadingFood] = useState(true);
+  const backend = "https://languagesbackend.onrender.com";
 
   const renderIcons = (iconsCount) => {
     const iconsArray = Array.from(Array(iconsCount).keys());
@@ -106,12 +111,9 @@ function Home() {
     setArtForms(updatedArtForms);
 
     try {
-      await axios.patch(
-        `http://localhost:3000/api/art/${artForm.Art_Form_ID}`,
-        {
-          Rating: artForm.Rating + 1,
-        }
-      );
+      await axios.patch(`${backend}/api/art/${artForm.Art_Form_ID}`, {
+        Rating: artForm.Rating + 1,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -126,12 +128,9 @@ function Home() {
     setArtForms(updatedArtForms);
 
     try {
-      await axios.patch(
-        `http://localhost:3000/api/art/${artForm.Art_Form_ID}`,
-        {
-          Rating: artForm.Rating - 1,
-        }
-      );
+      await axios.patch(`${backend}/api/art/${artForm.Art_Form_ID}`, {
+        Rating: artForm.Rating - 1,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -140,42 +139,48 @@ function Home() {
   useEffect(() => {
     const fetchAllData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/art", {
+        setLoadingArt(true);
+        const response = await axios.get(`${backend}/api/art`, {
           headers: { "Cache-Control": "public, max-age=86400" }, // Set cache headers for API request
         });
         setArtForms(response.data.data);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoadingArt(false);
       }
     };
     const fetchAllData1 = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/dance", {
+        setLoadingDance(true);
+        const response = await axios.get(`${backend}/api/dance`, {
           headers: { "Cache-Control": "public, max-age=86400" }, // Set cache headers for API request
         });
         setDanceForm(response.data.data);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoadingDance(false);
       }
     };
     const fetchAllData2 = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/food", {
+        setLoadingFood(true);
+        const response = await axios.get(`${backend}/api/food`, {
           headers: { "Cache-Control": "public, max-age=86400" }, // Set cache headers for API request
         });
         setFoods(response.data.data);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoadingFood(false);
       }
     };
     const fetchAllData3 = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/api/languages",
-          {
-            headers: { "Cache-Control": "public, max-age=86400" }, // Set cache headers for API request
-          }
-        );
+        const response = await axios.get(`${backend}/api/languages`, {
+          headers: { "Cache-Control": "public, max-age=86400" }, // Set cache headers for API request
+        });
         setLanguage(response.data.data);
       } catch (error) {
         console.error(error);
@@ -187,10 +192,142 @@ function Home() {
     fetchAllData2();
     fetchAllData3();
   }, []);
+  // Skeleton Loader Components
+  const SkeletonArtCard = () => (
+    <div className="post_home skeleton-card">
+      <div className="header_post skeleton-header-post">
+        <div className="skeleton-block skeleton-img-block"></div>
+      </div>
+      <div className="body_post">
+        <div className="post_content">
+          <div className="content">
+            <div className="content_box">
+              <div className="skeleton-block skeleton-art-heading-home"></div>
+              <div className="content_like content_like_home">
+                <div className="skeleton-block skeleton-icon"></div>
+                <div className="skeleton-block skeleton-rating"></div>
+              </div>
+            </div>
+            <div className="skeleton-block skeleton-art-desc-home"></div>
+            <div className="skeleton-block skeleton-art-desc-short-home"></div>
+          </div>
+          <div className="container_infos_home">
+            <div className="postedBy_home">
+              <div className="skeleton-block skeleton-label"></div>
+              <div className="skeleton-block skeleton-state-name"></div>
+            </div>
+            <div className="container_tags_home">
+              <div className="skeleton-block skeleton-label"></div>
+              <div className="tags_home">
+                <ul className="tag">
+                  <li>
+                    <div className="skeleton-block skeleton-tag"></div>
+                  </li>
+                  <li>
+                    <div className="skeleton-block skeleton-tag"></div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const SkeletonDanceCard = () => (
+    <div className="post_home dance_post_home skeleton-card">
+      <div className="header_post skeleton-header-post">
+        <div className="skeleton-block skeleton-img-block"></div>
+      </div>
+      <div className="body_post_home dance_body_home">
+        <div className="post_content_home">
+          <div className="content">
+            <div className="content_box">
+              <div className="skeleton-block skeleton-dance-heading-home"></div>
+              <div className="content_like">
+                <div className="skeleton-block skeleton-icon"></div>
+                <div className="skeleton-block skeleton-icon"></div>
+                <div className="skeleton-block skeleton-icon"></div>
+                <div className="skeleton-block skeleton-icon"></div>
+                <div className="skeleton-block skeleton-icon"></div>
+              </div>
+            </div>
+            <div className="skeleton-block skeleton-dance-desc-home"></div>
+            <div className="skeleton-block skeleton-dance-desc-short-home"></div>
+          </div>
+          <div className="container_infos_home">
+            <div className="postedBy">
+              <div className="skeleton-block skeleton-label"></div>
+              <div className="skeleton-block skeleton-state-name"></div>
+            </div>
+            <div className="container_tags">
+              <div className="skeleton-block skeleton-label"></div>
+              <div className="tags_home">
+                <ul>
+                  <li>
+                    <div className="skeleton-block skeleton-tag"></div>
+                  </li>
+                  <li>
+                    <div className="skeleton-block skeleton-tag"></div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const SkeletonFoodCard = () => (
+    <div className="food_card_home skeleton-card">
+      <div className="img_cover">
+        <div className="food_img skeleton-img">
+          <div className="skeleton-block skeleton-img-block"></div>
+        </div>
+      </div>
+      <div className="food_content_home">
+        <div className="content_main_home">
+          <div className="content_heading_food_home">
+            <div className="skeleton-block skeleton-food-heading-home"></div>
+            <div className="skeleton-block skeleton-circle"></div>
+          </div>
+          <div>
+            <div className="skeleton-block skeleton-food-desc-home"></div>
+          </div>
+        </div>
+        <div className="content_left">
+          <div className="ingredient_home flex">
+            <div className="skeleton-block skeleton-ing-line-home"></div>
+          </div>
+          <div className="food_attributes_home">
+            <div className="time flex">
+              <div className="skeleton-block skeleton-icon"></div>
+              <div className="skeleton-block skeleton-attr-text"></div>
+            </div>
+            <div className="course flex pad">
+              <div className="skeleton-block skeleton-icon"></div>
+              <div className="skeleton-block skeleton-attr-text"></div>
+            </div>
+            <div className="state flex">
+              <div className="skeleton-block skeleton-icon"></div>
+              <div className="skeleton-block skeleton-attr-text"></div>
+            </div>
+            <div className="flavor flex pad">
+              <div className="skeleton-block skeleton-icon"></div>
+              <div className="skeleton-block skeleton-attr-text"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   // const [list, setList] = useState([]);
 
   // useEffect(() => {
-  //   axios.get("http://localhost:3000/api/users").then((res) => {
+  //   axios.get(`${backend}/api/users`).then((res) => {
   //     setList(res.data);
   //     // console.log(res.data);
   //   });
@@ -301,80 +438,88 @@ function Home() {
               </Link>
             </div>
             <div className=" container_art2">
-              {artForms.slice(0, 3).map((artForm) => (
-                <div key={artForm.Art_Form_ID} className="post_home">
-                  <div className="header_post">
-                    <img
-                      className="post_img_home"
-                      src={require(`./../img/Art_Form_Images/art_image_${artForm.Art_Form_ID}.jpg`)}
-                      alt=""
-                    />
-                  </div>
+              {loadingArt ? (
+                <>
+                  {[...Array(3)].map((_, index) => (
+                    <SkeletonArtCard key={`skeleton-art-${index}`} />
+                  ))}
+                </>
+              ) : (
+                artForms.slice(0, 3).map((artForm) => (
+                  <div key={artForm.Art_Form_ID} className="post_home">
+                    <div className="header_post">
+                      <img
+                        className="post_img_home"
+                        src={require(`./../img/Art_Form_Images/art_image_${artForm.Art_Form_ID}.jpg`)}
+                        alt=""
+                      />
+                    </div>
 
-                  <div className="body_post">
-                    <div className="post_content">
-                      <div className="content">
-                        <div className="content_box">
-                          <h1 className=" content_heading_home">
-                            {artForm.Art_Form}
-                          </h1>
+                    <div className="body_post">
+                      <div className="post_content">
+                        <div className="content">
+                          <div className="content_box">
+                            <h1 className=" content_heading_home">
+                              {artForm.Art_Form}
+                            </h1>
 
-                          <div
-                            className={`content_like content_like_home ${
-                              artForm.clicked ? "clicked" : ""
-                            }`}
-                            onClick={() =>
-                              artForm.clicked
-                                ? handleIconClick2(artForm)
-                                : handleIconClick(artForm)
-                            }
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              className={`w-6 h-6 show-icon art_icon art_icon_home ${
+                            <div
+                              className={`content_like content_like_home ${
                                 artForm.clicked ? "clicked" : ""
                               }`}
+                              onClick={() =>
+                                artForm.clicked
+                                  ? handleIconClick2(artForm)
+                                  : handleIconClick(artForm)
+                              }
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
-                              />
-                            </svg>
-                            {artForm.Rating}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                className={`w-6 h-6 show-icon art_icon art_icon_home ${
+                                  artForm.clicked ? "clicked" : ""
+                                }`}
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+                                />
+                              </svg>
+                              {artForm.Rating}
+                            </div>
                           </div>
+
+                          <p className=" content_desc_home">
+                            {artForm.Description}
+                          </p>
                         </div>
 
-                        <p className=" content_desc_home">
-                          {artForm.Description}
-                        </p>
-                      </div>
-
-                      <div className="container_infos_home">
-                        <div className="postedBy_home">
-                          <span className="tag_heading">state</span>
-                          <div className="state_name state_name_home">
-                            {artForm.state.State_Name}
+                        <div className="container_infos_home">
+                          <div className="postedBy_home">
+                            <span className="tag_heading">state</span>
+                            <div className="state_name state_name_home">
+                              {artForm.state.State_Name}
+                            </div>
                           </div>
-                        </div>
 
-                        <div className="container_tags_home">
-                          <span>tags</span>
-                          <div className="tags_home">
-                            <ul className="tag">
-                              <li>{artForm.Tags.split(",")[0]}</li>
-                              <li>{artForm.Tags.split(",")[1]}</li>
-                            </ul>
+                          <div className="container_tags_home">
+                            <span>tags</span>
+                            <div className="tags_home">
+                              <ul className="tag">
+                                <li>{artForm.Tags.split(",")[0]}</li>
+                                <li>{artForm.Tags.split(",")[1]}</li>
+                              </ul>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
           <div className="show show-DanceForm">
@@ -402,61 +547,69 @@ function Home() {
             </div>
             <div className="show-details1">
               <div className="container_art2">
-                {danceForm.slice(0, 3).map((danceForm) => (
-                  <div
-                    key={danceForm.Dance_ID}
-                    className="post_home  dance_post_home"
-                  >
-                    <div className="header_post">
-                      <img
-                        className="post_img"
-                        src={require(`./../img/Dance_Images/${danceForm.Dance_Images}.jpg`)}
-                        alt=""
-                      />
-                    </div>
+                {loadingDance ? (
+                  <>
+                    {[...Array(3)].map((_, index) => (
+                      <SkeletonDanceCard key={`skeleton-dance-${index}`} />
+                    ))}
+                  </>
+                ) : (
+                  danceForm.slice(0, 3).map((danceForm) => (
+                    <div
+                      key={danceForm.Dance_ID}
+                      className="post_home  dance_post_home"
+                    >
+                      <div className="header_post">
+                        <img
+                          className="post_img"
+                          src={require(`./../img/Dance_Images/${danceForm.Dance_Images}.jpg`)}
+                          alt=""
+                        />
+                      </div>
 
-                    <div className="body_post_home dance_body_home">
-                      <div className="post_content_home">
-                        <div className="content">
-                          <div className="content_box ">
-                            <h1 className="content_heading_home2 ">
-                              {danceForm.Dance_Form}
-                            </h1>
+                      <div className="body_post_home dance_body_home">
+                        <div className="post_content_home">
+                          <div className="content">
+                            <div className="content_box ">
+                              <h1 className="content_heading_home2 ">
+                                {danceForm.Dance_Form}
+                              </h1>
 
-                            <div className="content_like">
-                              {renderIcons(danceForm.Rating)}
+                              <div className="content_like">
+                                {renderIcons(danceForm.Rating)}
+                              </div>
                             </div>
-                          </div>
 
-                          <p className="content_desc_home2">
-                            {danceForm.Description}
-                          </p>
-                          {/* <h3 className="dance_instruments">Instruments</h3>
+                            <p className="content_desc_home2">
+                              {danceForm.Description}
+                            </p>
+                            {/* <h3 className="dance_instruments">Instruments</h3>
                     <p className="content_desc">{danceForm.Instruments}</p> */}
-                        </div>
-
-                        <div className="container_infos_home">
-                          <div className="postedBy">
-                            <span>state</span>
-                            <div className="state_name_home2">
-                              {danceForm.state.State_Name}
-                            </div>
                           </div>
 
-                          <div className="container_tags">
-                            <span>tags</span>
-                            <div className="tags_home">
-                              <ul>
-                                <li>{danceForm.Tags.split(",")[0]}</li>
-                                <li>{danceForm.Tags.split(",")[1]}</li>
-                              </ul>
+                          <div className="container_infos_home">
+                            <div className="postedBy">
+                              <span>state</span>
+                              <div className="state_name_home2">
+                                {danceForm.state.State_Name}
+                              </div>
+                            </div>
+
+                            <div className="container_tags">
+                              <span>tags</span>
+                              <div className="tags_home">
+                                <ul>
+                                  <li>{danceForm.Tags.split(",")[0]}</li>
+                                  <li>{danceForm.Tags.split(",")[1]}</li>
+                                </ul>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>
@@ -485,81 +638,93 @@ function Home() {
             </div>
             <div className="show-details1">
               <div className=" food_container_home">
-                {foods.slice(2, 4).map((food) => (
-                  <div key={food.Food_ID} className="food_card_home">
-                    <div className="img_cover">
-                      <div className="food_img">
-                        <img
-                          src={require(`./../img/Home_Images/${food.Images}.jpg`)}
-                          alt="Pic of Indian traditional food"
-                          className="card_img_home"
-                        ></img>
+                {loadingFood ? (
+                  <>
+                    {[...Array(2)].map((_, index) => (
+                      <SkeletonFoodCard key={`skeleton-food-${index}`} />
+                    ))}
+                  </>
+                ) : (
+                  foods.slice(2, 4).map((food) => (
+                    <div key={food.Food_ID} className="food_card_home">
+                      <div className="img_cover">
+                        <div className="food_img">
+                          <img
+                            src={require(`./../img/Home_Images/${food.Images}.jpg`)}
+                            alt="Pic of Indian traditional food"
+                            className="card_img_home"
+                          ></img>
+                        </div>
+                      </div>
+                      <div className=" food_content_home">
+                        <div className="content_main_home">
+                          <div className="content_heading_food_home">
+                            <h1 className="food_heading_home">
+                              {food.Food_Name}
+                            </h1>
+                            <div className="content_logo">
+                              {setSymbol(food.Type)}
+                            </div>
+                          </div>
+                          <div>
+                            <p className="content_desc_food_home">
+                              ({food.Description})
+                            </p>
+                          </div>
+                        </div>
+                        <div className="content_left">
+                          <div className="ingredient_home flex">
+                            <p className="ingredient_heading_home">
+                              Ingredients&rarr;
+                            </p>
+                            <p className="ingredients_home">
+                              {food.Ingredients}
+                            </p>
+                          </div>
+                          <div className="food_attributes_home">
+                            <div className="time flex">
+                              <IonIcon
+                                aria-label="icon for time"
+                                icon={timeOutline}
+                                className="food_icon_home"
+                              />
+                              <p className="timer">
+                                {food.Prepration_time} mins.
+                              </p>
+                            </div>
+                            <div className="course flex pad">
+                              <IonIcon
+                                aria-label="icon for course"
+                                icon={fastFoodOutline}
+                                className="food_icon_home"
+                              />
+                              <p className="course_content capitalize">
+                                {" "}
+                                {food.Course}
+                              </p>
+                            </div>
+                            <div className="state flex">
+                              <IonIcon
+                                aria-label="icon for location"
+                                icon={locationOutline}
+                                className="food_icon_home"
+                              />
+                              <p className="statename">
+                                {food.state.State_Name}
+                              </p>
+                            </div>
+                            <div className="flavor flex pad">
+                              {setIcon(food.Flavor)}
+                              <p className="flavor_content capitalize">
+                                {food.Flavor}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div className=" food_content_home">
-                      <div className="content_main_home">
-                        <div className="content_heading_food_home">
-                          <h1 className="food_heading_home">
-                            {food.Food_Name}
-                          </h1>
-                          <div className="content_logo">
-                            {setSymbol(food.Type)}
-                          </div>
-                        </div>
-                        <div>
-                          <p className="content_desc_food_home">
-                            ({food.Description})
-                          </p>
-                        </div>
-                      </div>
-                      <div className="content_left">
-                        <div className="ingredient_home flex">
-                          <p className="ingredient_heading_home">
-                            Ingredients&rarr;
-                          </p>
-                          <p className="ingredients_home">{food.Ingredients}</p>
-                        </div>
-                        <div className="food_attributes_home">
-                          <div className="time flex">
-                            <IonIcon
-                              aria-label="icon for time"
-                              icon={timeOutline}
-                              className="food_icon_home"
-                            />
-                            <p className="timer">
-                              {food.Prepration_time} mins.
-                            </p>
-                          </div>
-                          <div className="course flex pad">
-                            <IonIcon
-                              aria-label="icon for course"
-                              icon={fastFoodOutline}
-                              className="food_icon_home"
-                            />
-                            <p className="course_content capitalize">
-                              {" "}
-                              {food.Course}
-                            </p>
-                          </div>
-                          <div className="state flex">
-                            <IonIcon
-                              aria-label="icon for location"
-                              icon={locationOutline}
-                              className="food_icon_home"
-                            />
-                            <p className="statename">{food.state.State_Name}</p>
-                          </div>
-                          <div className="flavor flex pad">
-                            {setIcon(food.Flavor)}
-                            <p className="flavor_content capitalize">
-                              {food.Flavor}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>

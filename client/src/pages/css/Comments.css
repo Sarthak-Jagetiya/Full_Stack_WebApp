@@ -1,0 +1,39 @@
+/* Comments.css */
+
+.container {
+  max-width: 800px;
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: box-shadow 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-text {
+  color: #333;
+}
+
+.btn-info,
+.btn-danger {
+  margin-top: 10px;
+}
+
+.btn-info:hover,
+.btn-danger:hover {
+  filter: brightness(90%);
+}

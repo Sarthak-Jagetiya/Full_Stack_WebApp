@@ -1,6 +1,27 @@
 .nodata {
   margin: 5rem auto;
   grid-column: 1 / span 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nodata-img {
+  max-width: 100%;
+  height: auto;
+  width: 400px;
+}
+
+@media (max-width: 48em) {
+  .nodata-img {
+    width: 300px;
+  }
+}
+
+@media (max-width: 30em) {
+  .nodata-img {
+    width: 250px;
+  }
 }
 
 .food_container {
@@ -11,6 +32,7 @@
   gap: 4rem;
   align-items: center;
   justify-content: center;
+  grid-auto-rows: auto;
 }
 
 .food_card {
@@ -23,6 +45,10 @@
   box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
   overflow: hidden;
   grid-template-columns: 2fr 3fr;
+}
+
+.skeleton-card {
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.05);
 }
 
 .food_card:hover .food_img {

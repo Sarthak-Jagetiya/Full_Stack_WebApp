@@ -5,6 +5,7 @@ import Login from "./pages/login";
 import SignUp from "./pages/SignUp";
 import Languages from "./pages/Languages";
 import Art from "./pages/Art";
+import Comments from "./pages/Comments";
 import Dance from "./pages/Dance";
 import Food from "./pages/Food";
 import { useState } from "react";
@@ -101,6 +102,7 @@ function App() {
           <Route path="/login" exact Component={Login}></Route>
           <Route path="/signup" exact Component={SignUp}></Route>
           <Route path="/art" exact Component={Art}></Route>
+          <Route path="/comments/:id" exact Component={Comments}></Route>
           <Route path="/dance" exact Component={Dance}></Route>
           <Route path="/language" exact Component={Languages}></Route>
           <Route path="/food" exact Component={Food}></Route>

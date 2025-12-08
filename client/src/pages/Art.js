@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+// import { Link } from "react-router-dom";
 import "./css/Art.css";
+import "./css/SkeletonCard.css";
 import { IoSearch } from "react-icons/io5";
 
 // Art Form
@@ -9,6 +11,8 @@ function Art() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("relevance");
   const [filterTags, setFilterTags] = useState("all");
+  const [loading, setLoading] = useState(true);
+  const backend = "https://languagesbackend.onrender.com";
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,12 +29,9 @@ function Art() {
     setArtForms(updatedArtForms);
 
     try {
-      await axios.patch(
-        `http://localhost:3000/api/art/${artForm.Art_Form_ID}`,
-        {
-          Rating: artForm.Rating + 1,
-        }
-      );
+      await axios.patch(`${backend}/api/art/${artForm.Art_Form_ID}`, {
+        Rating: artForm.Rating + 1,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -46,12 +47,9 @@ function Art() {
     setArtForms(updatedArtForms);
 
     try {
-      await axios.patch(
-        `http://localhost:3000/api/art/${artForm.Art_Form_ID}`,
-        {
-          Rating: artForm.Rating - 1,
-        }
-      );
+      await axios.patch(`${backend}/api/art/${artForm.Art_Form_ID}`, {
+        Rating: artForm.Rating - 1,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -60,10 +58,13 @@ function Art() {
   useEffect(() => {
     const fetchAllData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/art");
+        setLoading(true);
+        const response = await axios.get(`${backend}/api/art`);
         setArtForms(response.data.data);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchAllData();
@@ -82,6 +83,49 @@ function Art() {
     }
     setArtForms(sortedArtForms);
   }, [sortOrder]);
+
+  // Skeleton Loader Component
+  const SkeletonCard = () => (
+    <div className="post skeleton-card">
+      <div className="header_post skeleton-header-post">
+        <div className="skeleton-block skeleton-img-block"></div>
+      </div>
+      <div className="body_post">
+        <div className="post_content">
+          <div className="content">
+            <div className="content_box">
+              <div className="skeleton-block skeleton-art-heading"></div>
+              <div className="content_like">
+                <div className="skeleton-block skeleton-icon"></div>
+                <div className="skeleton-block skeleton-rating"></div>
+              </div>
+            </div>
+            <div className="skeleton-block skeleton-art-desc"></div>
+            <div className="skeleton-block skeleton-art-desc-short"></div>
+          </div>
+          <div className="container_infos">
+            <div className="postedBy">
+              <div className="skeleton-block skeleton-label"></div>
+              <div className="skeleton-block skeleton-state-name"></div>
+            </div>
+            <div className="container_tags">
+              <div className="skeleton-block skeleton-label"></div>
+              <div className="tags">
+                <ul>
+                  <li>
+                    <div className="skeleton-block skeleton-tag"></div>
+                  </li>
+                  <li>
+                    <div className="skeleton-block skeleton-tag"></div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="star">
@@ -134,89 +178,118 @@ function Art() {
         </div>
       </div>
       <div className="container_art">
-        {artForms
-          .filter((item) => {
-            return (
-              filterTags === "all" ||
-              item.Tags.toLowerCase().split(", ").includes(filterTags)
-            );
-          })
-          .filter((item) => {
-            return searchTerm.toLowerCase() === ""
-              ? item
-              : item.state.State_Name.toLowerCase().includes(searchTerm);
-          })
-          .map((artForm) => (
-            <div key={artForm.Art_Form_ID} className="post">
-              <div className="header_post">
+        {loading ? (
+          <>
+            {[...Array(9)].map((_, index) => (
+              <SkeletonCard key={`skeleton-${index}`} />
+            ))}
+          </>
+        ) : (
+          (() => {
+            const filteredArtForms = artForms
+              .filter((item) => {
+                return (
+                  filterTags === "all" ||
+                  item.Tags.toLowerCase().split(", ").includes(filterTags)
+                );
+              })
+              .filter((item) => {
+                return searchTerm.toLowerCase() === ""
+                  ? item
+                  : item.state.State_Name.toLowerCase().includes(searchTerm);
+              });
+
+            return filteredArtForms.length === 0 ? (
+              <div className="nodata">
                 <img
-                  className="post_img"
-                  rel="preload"
-                  src={require(`./../img/Art_Form_Images/art_image_${artForm.Art_Form_ID}.jpg`)}
-                  alt=""
+                  src={require("./../img/no_data_found.jpg")}
+                  alt="No Data Found"
+                  className="nodata-img"
                 />
               </div>
-
-              <div className="body_post">
-                <div className="post_content">
-                  <div className="content">
-                    <div className="content_box">
-                      <h1 className="content_heading">{artForm.Art_Form}</h1>
-
-                      <div
-                        className={`content_like ${
-                          artForm.clicked ? "clicked" : ""
-                        }`}
-                        onClick={() =>
-                          artForm.clicked
-                            ? handleIconClick2(artForm)
-                            : handleIconClick(artForm)
-                        }
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          className={`w-6 h-6 show-icon art_icon ${
-                            artForm.clicked ? "clicked" : ""
-                          }`}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
-                          />
-                        </svg>
-                        {artForm.Rating}
-                      </div>
-                    </div>
-
-                    <p className="content_desc">{artForm.Description}</p>
+            ) : (
+              filteredArtForms.map((artForm) => (
+                <div key={artForm.Art_Form_ID} className="post">
+                  {/* <Link
+                key={artForm.Art_Form_ID}
+                to={`/comments/${artForm.Art_Form_ID}`} // Assuming you want to pass the Art_Form_ID to the comments page
+                className="post-link"
+              > */}
+                  <div className="header_post">
+                    <img
+                      className="post_img"
+                      rel="preload"
+                      src={require(`./../img/Art_Form_Images/art_image_${artForm.Art_Form_ID}.jpg`)}
+                      alt=""
+                    />
                   </div>
+                  {/* </Link> */}
 
-                  <div className="container_infos">
-                    <div className="postedBy">
-                      <span>state</span>
-                      <div className="state_name">
-                        {artForm.state.State_Name}
+                  <div className="body_post">
+                    <div className="post_content">
+                      <div className="content">
+                        <div className="content_box">
+                          <h1 className="content_heading">
+                            {artForm.Art_Form}
+                          </h1>
+
+                          <div
+                            className={`content_like ${
+                              artForm.clicked ? "clicked" : ""
+                            }`}
+                            onClick={() =>
+                              artForm.clicked
+                                ? handleIconClick2(artForm)
+                                : handleIconClick(artForm)
+                            }
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              className={`w-6 h-6 show-icon art_icon ${
+                                artForm.clicked ? "clicked" : ""
+                              }`}
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+                              />
+                            </svg>
+                            {artForm.Rating}
+                          </div>
+                        </div>
+
+                        <p className="content_desc">{artForm.Description}</p>
                       </div>
-                    </div>
 
-                    <div className="container_tags">
-                      <span>tags</span>
-                      <div className="tags">
-                        <ul>
-                          <li>{artForm.Tags.split(",")[0]}</li>
-                          <li>{artForm.Tags.split(",")[1]}</li>
-                        </ul>
+                      <div className="container_infos">
+                        <div className="postedBy">
+                          <span>state</span>
+                          <div className="state_name">
+                            {artForm.state.State_Name}
+                          </div>
+                        </div>
+
+                        <div className="container_tags">
+                          <span>tags</span>
+                          <div className="tags">
+                            <ul>
+                              <li>{artForm.Tags.split(",")[0]}</li>
+                              <li>{artForm.Tags.split(",")[1]}</li>
+                            </ul>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              ))
+            );
+          })()
+        )}
       </div>
     </div>
   );

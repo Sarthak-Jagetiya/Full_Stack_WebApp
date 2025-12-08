@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./css/language.css";
+import "./css/SkeletonCard.css";
 import { IoSearch } from "react-icons/io5";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 
@@ -14,6 +15,8 @@ function Languages() {
   const [languagesPerPage] = useState(10);
   const [paginationRange, setPaginationRange] = useState([]);
   const [filteredLanguages, setFilteredLanguages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const backend = "https://languagesbackend.onrender.com";
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,7 +35,8 @@ function Languages() {
   useEffect(() => {
     const fetchAllData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/languages");
+        setLoading(true);
+        const response = await axios.get(`${backend}/api/languages`);
         setLanguages(response.data.data);
       } catch (error) {
         console.error(error);
@@ -40,7 +44,7 @@ function Languages() {
 
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/languages/toplanguage?top=10"
+          `${backend}/api/languages/toplanguage?top=10`
         );
         setTopLanguages(response.data.data);
       } catch (error) {
@@ -49,11 +53,13 @@ function Languages() {
 
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/languages/leastlanguage?least=10"
+          `${backend}/api/languages/leastlanguage?least=10`
         );
         setLeastLanguages(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -133,6 +139,34 @@ function Languages() {
     }
   };
 
+  // Skeleton Loader Component
+  const SkeletonCard = () => (
+    <div className="lang-box skeleton-card">
+      <div className="box-name skeleton-box-name">
+        <div className="name">
+          <div className="skeleton-block skeleton-lang-name"></div>
+          <div className="skeleton-block skeleton-percentage"></div>
+        </div>
+        <div className="skeleton-block skeleton-lang-type"></div>
+      </div>
+      <div className="box-attributes">
+        <div className="attribute1">
+          <div className="skeleton-block skeleton-icon"></div>
+          <div className="skeleton-block skeleton-attr-text"></div>
+        </div>
+        <div className="attribute1">
+          <div className="skeleton-block skeleton-icon"></div>
+          <div className="skeleton-block skeleton-attr-text"></div>
+        </div>
+      </div>
+      <div className="box-desc">
+        <div className="skeleton-block skeleton-desc-line"></div>
+        <div className="skeleton-block skeleton-desc-line"></div>
+        <div className="skeleton-block skeleton-desc-line-short"></div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="container">
       <div className="search">
@@ -163,10 +197,19 @@ function Languages() {
         </div>
       </div>
       <div className="language-list">
-        {currentLanguages.length === 0 ? (
+        {loading ? (
+          <>
+            {[...Array(10)].map((_, index) => (
+              <SkeletonCard key={`skeleton-${index}`} />
+            ))}
+          </>
+        ) : currentLanguages.length === 0 ? (
           <div className="nodata">
-            <h2>No Data Found!</h2>
-            <p>(try changing filters or state name)</p>
+            <img
+              src={require("./../img/no_data_found.jpg")}
+              alt="No Data Found"
+              className="nodata-img"
+            />
           </div>
         ) : (
           currentLanguages.map((language) => (

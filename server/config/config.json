@@ -1,28 +1,28 @@
 {
   "development": {
-    "username": "sql6689445",
-    "password": "BkxjYDFqIv",
-    "database": "sql6689445",
-    "host": "sql6.freesqldatabase.com",
-    "port": "3306",
+    "username": "avnadmin",
+    "password": "AVNS_B0C1YGD-EqY7fE5CqVl",
+    "database": "language",
+    "host": "languagedb-languagedb.c.aivencloud.com",
+    "port": "25812",
     "dialect": "mysql",
     "logging": false
   },
   "test": {
-    "username": "sql6689445",
-    "password": "BkxjYDFqIv",
-    "database": "sql6689445",
-    "host": "sql6.freesqldatabase.com",
-    "port": "3306",
+    "username": "avnadmin",
+    "password": "AVNS_B0C1YGD-EqY7fE5CqVl",
+    "database": "language",
+    "host": "languagedb-languagedb.c.aivencloud.com",
+    "port": "25812",
     "dialect": "mysql",
     "logging": false
   },
   "production": {
-    "username": "sql6689445",
-    "password": "BkxjYDFqIv",
-    "database": "sql6689445",
-    "host": "sql6.freesqldatabase.com",
-    "port": "3306",
+    "username": "avnadmin",
+    "password": "AVNS_B0C1YGD-EqY7fE5CqVl",
+    "database": "language",
+    "host": "languagedb-languagedb.c.aivencloud.com",
+    "port": "25812",
     "dialect": "mysql",
     "logging": false
   }

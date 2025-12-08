@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./css/Food.css";
+import "./css/SkeletonCard.css";
 import { IonIcon } from "@ionic/react";
 import {
   fastFoodOutline,
@@ -23,6 +24,8 @@ function Food() {
   const [foodsPerPage] = useState(10);
   const [paginationRange, setPaginationRange] = useState([]);
   const [filteredFoods, setFilteredFoods] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const backend = "https://languagesbackend.onrender.com";
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -81,10 +84,14 @@ function Food() {
   useEffect(() => {
     const fetchAllData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/food");
+        setLoading(true);
+        const response = await axios.get(`${backend}/api/food`);
         setFoods(response.data.data);
       } catch (error) {
         console.error(error);
+        setLoading(false);
+      } finally {
+        setLoading(false);
       }
     };
     fetchAllData();
@@ -171,6 +178,51 @@ function Food() {
     }
   };
 
+  // Skeleton Loader Component
+  const SkeletonCard = () => (
+    <div className="food_card skeleton-card">
+      <div className="img_cover">
+        <div className="food_img skeleton-img">
+          <div className="skeleton-block skeleton-img-block"></div>
+        </div>
+      </div>
+      <div className="food_content">
+        <div className="content_main">
+          <div className="content_heading_food">
+            <div className="skeleton-block skeleton-title"></div>
+            <div className="skeleton-block skeleton-circle"></div>
+          </div>
+          <div>
+            <div className="skeleton-block skeleton-desc"></div>
+          </div>
+        </div>
+        <div className="content_attributes">
+          <div className="ingredient flex">
+            <div className="skeleton-block skeleton-ing-line"></div>
+          </div>
+          <div className="food_attributes">
+            <div className="time flex">
+              <div className="skeleton-block skeleton-icon"></div>
+              <div className="skeleton-block skeleton-attr-text"></div>
+            </div>
+            <div className="course flex margin">
+              <div className="skeleton-block skeleton-icon"></div>
+              <div className="skeleton-block skeleton-attr-text"></div>
+            </div>
+            <div className="state flex">
+              <div className="skeleton-block skeleton-icon"></div>
+              <div className="skeleton-block skeleton-attr-text"></div>
+            </div>
+            <div className="flavor flex margin">
+              <div className="skeleton-block skeleton-icon"></div>
+              <div className="skeleton-block skeleton-attr-text"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="star">
       <div className="search">
@@ -226,10 +278,19 @@ function Food() {
         </div>
       </div>
       <div className="food_container">
-        {currentFoods.length === 0 ? (
+        {loading ? (
+          <>
+            {[...Array(10)].map((_, index) => (
+              <SkeletonCard key={`skeleton-${index}`} />
+            ))}
+          </>
+        ) : currentFoods.length === 0 ? (
           <div className="nodata">
-            <h2>No Data Found!</h2>
-            <p>(try changing filters or state name)</p>
+            <img
+              src={require("./../img/no_data_found.jpg")}
+              alt="No Data Found"
+              className="nodata-img"
+            />
           </div>
         ) : (
           currentFoods.map((food) => (

@@ -15,6 +15,7 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState("");
   const [signupMessage, setSignupMessage] = useState("");
   const [loginMessage, setLoginMessage] = useState("");
+  const backend = "https://languagesbackend.onrender.com";
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -25,11 +26,12 @@ function Login() {
     event.preventDefault();
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/users/${loginUsername}/${loginPassword}`
+        `${backend}/api/users/${loginUsername}/${loginPassword}`
       );
       if (response.status === 200) {
         setLoginStatus(response.data.data.data.userName);
         setLoginMessage("Successfully Logged In");
+        window.location.href = "/home";
       } else {
         setLoginMessage("Login failed");
       }
@@ -50,7 +52,7 @@ function Login() {
     event.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3000/api/users/", {
+      const response = await axios.post(`${backend}/api/users/`, {
         userName,
         password,
         email,
@@ -58,6 +60,7 @@ function Login() {
       console.log(response);
       if (response.data.status === "success") {
         setSignupMessage("Successfully Signed Up!");
+        window.location.href = "/home";
       } else {
         setErrorMessage(response.data.message);
       }

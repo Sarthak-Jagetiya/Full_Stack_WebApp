@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./css/Dance.css";
+import "./css/SkeletonCard.css";
 import { IoSearch } from "react-icons/io5";
 
 function Dance() {
@@ -8,6 +9,8 @@ function Dance() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("relevance");
   const [filterTags, setFilterTags] = useState("all");
+  const [loading, setLoading] = useState(true);
+  const backend = "https://languagesbackend.onrender.com";
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -33,10 +36,13 @@ function Dance() {
   useEffect(() => {
     const fetchAllData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/dance");
+        setLoading(true);
+        const response = await axios.get(`${backend}/api/dance`);
         setDanceForm(response.data.data);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchAllData();
@@ -55,6 +61,52 @@ function Dance() {
     }
     setDanceForm(sortedDanceForms);
   }, [sortOrder]);
+
+  // Skeleton Loader Component
+  const SkeletonCard = () => (
+    <div className="post dance_post skeleton-card">
+      <div className="header_post skeleton-header-post">
+        <div className="skeleton-block skeleton-img-block"></div>
+      </div>
+      <div className="body_post dance_body">
+        <div className="post_content post_content_dance">
+          <div className="content">
+            <div className="content_box">
+              <div className="skeleton-block skeleton-dance-heading"></div>
+              <div className="content_like">
+                <div className="skeleton-block skeleton-icon"></div>
+                <div className="skeleton-block skeleton-icon"></div>
+                <div className="skeleton-block skeleton-icon"></div>
+                <div className="skeleton-block skeleton-icon"></div>
+                <div className="skeleton-block skeleton-icon"></div>
+              </div>
+            </div>
+            <div className="skeleton-block skeleton-dance-desc"></div>
+            <div className="skeleton-block skeleton-dance-desc-short"></div>
+          </div>
+          <div className="container_infos container_infos_dance">
+            <div className="postedBy postedBy_dance">
+              <div className="skeleton-block skeleton-label"></div>
+              <div className="skeleton-block skeleton-state-name"></div>
+            </div>
+            <div className="container_tags container_tags_dance">
+              <div className="skeleton-block skeleton-label"></div>
+              <div className="tags tags_dance">
+                <ul>
+                  <li>
+                    <div className="skeleton-block skeleton-tag"></div>
+                  </li>
+                  <li>
+                    <div className="skeleton-block skeleton-tag"></div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="star">
@@ -106,68 +158,89 @@ function Dance() {
         </div>
       </div>
       <div className="container_art">
-        {danceForm
-          .filter((item) => {
-            return (
-              filterTags === "all" ||
-              item.Tags.toLowerCase().split(", ").includes(filterTags)
-            );
-          })
-          .filter((item) => {
-            return searchTerm.toLowerCase() === ""
-              ? item
-              : item.state.State_Name.toLowerCase().includes(searchTerm);
-          })
-          .map((danceForm) => (
-            <div key={danceForm.Dance_ID} className="post dance_post">
-              <div className="header_post">
+        {loading ? (
+          <>
+            {[...Array(9)].map((_, index) => (
+              <SkeletonCard key={`skeleton-${index}`} />
+            ))}
+          </>
+        ) : (
+          (() => {
+            const filteredDanceForms = danceForm
+              .filter((item) => {
+                return (
+                  filterTags === "all" ||
+                  item.Tags.toLowerCase().split(", ").includes(filterTags)
+                );
+              })
+              .filter((item) => {
+                return searchTerm.toLowerCase() === ""
+                  ? item
+                  : item.state.State_Name.toLowerCase().includes(searchTerm);
+              });
+
+            return filteredDanceForms.length === 0 ? (
+              <div className="nodata">
                 <img
-                  className="post_img post_img_dance"
-                  src={require(`./../img/Dance_Images/${danceForm.Dance_Images}.jpg`)}
-                  alt=""
+                  src={require("./../img/no_data_found.jpg")}
+                  alt="No Data Found"
+                  className="nodata-img"
                 />
               </div>
-
-              <div className="body_post dance_body">
-                <div className="post_content post_content_dance">
-                  <div className="content">
-                    <div className="content_box ">
-                      <h1 className="content_heading content_heading_dance">
-                        {danceForm.Dance_Form}
-                      </h1>
-
-                      <div className="content_like">
-                        {renderIcons(danceForm.Rating)}
-                      </div>
-                    </div>
-
-                    <p className="content_desc content_desc_dance">
-                      {danceForm.Description}
-                    </p>
+            ) : (
+              filteredDanceForms.map((danceForm) => (
+                <div key={danceForm.Dance_ID} className="post dance_post">
+                  <div className="header_post">
+                    <img
+                      className="post_img post_img_dance"
+                      src={require(`./../img/Dance_Images/${danceForm.Dance_Images}.jpg`)}
+                      alt=""
+                    />
                   </div>
 
-                  <div className="container_infos container_infos_dance">
-                    <div className="postedBy postedBy_dance">
-                      <span>state</span>
-                      <div className="state_name state_name_dance">
-                        {danceForm.state.State_Name}
-                      </div>
-                    </div>
+                  <div className="body_post dance_body">
+                    <div className="post_content post_content_dance">
+                      <div className="content">
+                        <div className="content_box ">
+                          <h1 className="content_heading content_heading_dance">
+                            {danceForm.Dance_Form}
+                          </h1>
 
-                    <div className="container_tags container_tags_dance">
-                      <span>tags</span>
-                      <div className="tags tags_dance">
-                        <ul>
-                          <li>{danceForm.Tags.split(",")[0]}</li>
-                          <li>{danceForm.Tags.split(",")[1]}</li>
-                        </ul>
+                          <div className="content_like">
+                            {renderIcons(danceForm.Rating)}
+                          </div>
+                        </div>
+
+                        <p className="content_desc content_desc_dance">
+                          {danceForm.Description}
+                        </p>
+                      </div>
+
+                      <div className="container_infos container_infos_dance">
+                        <div className="postedBy postedBy_dance">
+                          <span>state</span>
+                          <div className="state_name state_name_dance">
+                            {danceForm.state.State_Name}
+                          </div>
+                        </div>
+
+                        <div className="container_tags container_tags_dance">
+                          <span>tags</span>
+                          <div className="tags tags_dance">
+                            <ul>
+                              <li>{danceForm.Tags.split(",")[0]}</li>
+                              <li>{danceForm.Tags.split(",")[1]}</li>
+                            </ul>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              ))
+            );
+          })()
+        )}
       </div>
     </div>
   );

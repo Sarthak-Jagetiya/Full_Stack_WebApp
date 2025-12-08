@@ -71,6 +71,90 @@
   align-items: baseline;
 }
 
+.nodata {
+  margin: 5rem auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.nodata-img {
+  max-width: 100%;
+  height: auto;
+  width: 400px;
+}
+
+@media (max-width: 57em) {
+  .nodata-img {
+    width: 300px;
+  }
+}
+
+@media (max-width: 48em) {
+  .nodata-img {
+    width: 250px;
+  }
+}
+
+/* Skeleton Loader Styles */
+.skeleton-card {
+  opacity: 0.9;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.skeleton-card:nth-child(odd) {
+  animation-delay: 0s;
+}
+
+.skeleton-card:nth-child(even) {
+  animation-delay: 0.2s;
+}
+
+.skeleton-box-name {
+  background-color: #e0e0e0 !important;
+}
+
+.skeleton-lang-name {
+  height: 1.5rem;
+  width: 8rem;
+  margin-right: 0.5rem;
+  border-radius: 4px;
+}
+
+.skeleton-percentage {
+  height: 1.2rem;
+  width: 3rem;
+  border-radius: 4px;
+}
+
+.skeleton-lang-type {
+  height: 1rem;
+  width: 6rem;
+  margin-top: 0.5rem;
+  border-radius: 4px;
+}
+
+.skeleton-attr-text {
+  height: 1rem;
+  width: 10rem;
+  border-radius: 4px;
+}
+
+.skeleton-desc-line {
+  height: 1rem;
+  width: 100%;
+  margin-bottom: 0.6rem;
+  border-radius: 4px;
+}
+
+.skeleton-desc-line-short {
+  height: 1rem;
+  width: 60%;
+  margin-bottom: 0;
+  border-radius: 4px;
+}
+
 
 
 /********************************/
@@ -102,6 +186,30 @@
 
   .attribute1:last-child {
     margin-top: -0.4rem;
+  }
+
+  .skeleton-lang-name {
+    height: 1.2rem;
+    width: 6rem;
+  }
+
+  .skeleton-percentage {
+    height: 1rem;
+    width: 2.5rem;
+  }
+
+  .skeleton-lang-type {
+    height: 0.9rem;
+    width: 5rem;
+  }
+
+  .skeleton-attr-text {
+    height: 0.8rem;
+    width: 8rem;
+  }
+
+  .skeleton-desc-line {
+    height: 0.8rem;
   }
 }
 
@@ -146,6 +254,35 @@
     border: none;
     border-top: 1px solid #333;
   }
+
+  .skeleton-lang-name {
+    height: 1.2rem;
+    width: 5rem;
+  }
+
+  .skeleton-percentage {
+    height: 1rem;
+    width: 2rem;
+  }
+
+  .skeleton-lang-type {
+    height: 0.9rem;
+    width: 4rem;
+  }
+
+  .skeleton-attr-text {
+    height: 0.8rem;
+    width: 7rem;
+  }
+
+  .skeleton-desc-line {
+    height: 0.8rem;
+  }
+
+  .skeleton-icon {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
 }
 
 /********************************/
@@ -159,6 +296,35 @@
 
   .box-desc {
     padding: 1.2rem;
+  }
+
+  .skeleton-lang-name {
+    height: 1rem;
+    width: 4rem;
+  }
+
+  .skeleton-percentage {
+    height: 0.9rem;
+    width: 1.8rem;
+  }
+
+  .skeleton-lang-type {
+    height: 0.8rem;
+    width: 3.5rem;
+  }
+
+  .skeleton-attr-text {
+    height: 0.7rem;
+    width: 6rem;
+  }
+
+  .skeleton-desc-line {
+    height: 0.7rem;
+  }
+
+  .skeleton-icon {
+    width: 1.2rem;
+    height: 1.2rem;
   }
 }
 
