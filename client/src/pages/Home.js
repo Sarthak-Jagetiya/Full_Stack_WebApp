@@ -344,24 +344,42 @@ function Home() {
               <div className="main-attributes">
                 <div className="attribute">
                   <p className="attribute-text">Food</p>
-                  <p className="attribute-number">{foods.length}+ Dishes</p>
+                  <p className="attribute-number">
+                    {foods.length === 0 ? (
+                      <div className="skeleton-block skeleton-numbers"></div>
+                    ) : (
+                      foods.length + "+ Dishes"
+                    )}
+                  </p>
                 </div>
                 <div className="attribute">
                   <p className="attribute-text">Art</p>
                   <p className="attribute-number">
-                    {artForms.length}+ Art Forms
+                    {artForms.length === 0 ? (
+                      <div className="skeleton-block skeleton-numbers"></div>
+                    ) : (
+                      artForms.length + "+ Art Forms"
+                    )}
                   </p>
                 </div>
                 <div className="attribute">
                   <p className="attribute-text">Dance Form</p>
                   <p className="attribute-number">
-                    {danceForm.length}+ Dance Forms
+                    {danceForm.length === 0 ? (
+                      <div className="skeleton-block skeleton-numbers"></div>
+                    ) : (
+                      danceForm.length + "+ Dance Forms"
+                    )}
                   </p>
                 </div>
                 <div className="attribute">
                   <p className="attribute-text">Languages</p>
                   <p className="attribute-number">
-                    {language.length}+ Languages
+                    {language.length === 0 ? (
+                      <div className="skeleton-block skeleton-numbers"></div>
+                    ) : (
+                      language.length + "+ Languages"
+                    )}
                   </p>
                 </div>
               </div>
